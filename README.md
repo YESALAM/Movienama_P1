@@ -1,4 +1,4 @@
 # Movienama_P1
 My first project for the Udacity Android Nanodegree.
 
-Please Add your api key in the Api.java file in API_KEY field .
+Please Add your api key in  API_KEY field of the me.seatech.movienama.util.Api class ;
