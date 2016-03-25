@@ -11,14 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.GridView;
-import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import me.seatech.movienama.adapter.GridAdapter;
+
 import me.seatech.movienama.scheme.*;
 import me.seatech.movienama.scheme.Result;
 import me.seatech.movienama.util.Api;
@@ -29,18 +28,16 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements Callback<Movies>,AdapterView.OnItemSelectedListener, AdapterView.OnItemClickListener {
+public class MainActivity extends AppCompatActivity implements Callback<Movies>,AdapterView.OnItemSelectedListener {
 
-    private final String LOG_TAG = "MainActivity" ;
+    private final String LOG_TAG = MainActivity.class.getSimpleName() ;
     private Toolbar toolbar ;
     private Spinner spinner ;
-    private GridView gridView ;
-    private ProgressBar progressBar ;
     private Retrofit retrofit ;
     private TmdbAPi tmdbAPi ;
-    private ArrayAdapter<CharSequence> adapter;
-    private  List<Result> results ;
-    private GridAdapter gridAdapter ;
+    private MainFragment mainFragment ;
+    private ArrayList<Result> results ;
+    private int choice=0 ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,13 +45,11 @@ public class MainActivity extends AppCompatActivity implements Callback<Movies>,
         setContentView(R.layout.activity_main);
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         spinner = (Spinner) findViewById(R.id.spinner);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar) ;
-        gridView = (GridView) findViewById(R.id.gridView) ;
-        gridView.setOnItemClickListener(this);
-        gridView.setVisibility(View.GONE);
-
+        mainFragment= (MainFragment) getSupportFragmentManager().findFragmentById(R.id.main_fragment);
         setSupportActionBar(toolbar);
         setSpinner();
+
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(Api.BASE_URL)
@@ -62,25 +57,32 @@ public class MainActivity extends AppCompatActivity implements Callback<Movies>,
                 .build();
         tmdbAPi = retrofit.create(TmdbAPi.class) ;
 
+        if(savedInstanceState != null ){
+            spinner.setSelection(savedInstanceState.getInt("choice"));
+            results = savedInstanceState.getParcelableArrayList("key");
+            mainFragment.refresh(results);
+        }
     }
 
 
     private void setSpinner(){
         spinner.setOnItemSelectedListener(this);
-        adapter = ArrayAdapter.createFromResource(this,R.array.sorting_param,android.R.layout.simple_spinner_item) ;
+        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.sorting_param, android.R.layout.simple_spinner_item) ;
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
     }
 
 
     @Override
-    public void onResponse(Call<Movies> call, Response<Movies> response) {
-        progressBar.setVisibility(View.GONE);
-        gridView.setVisibility(View.VISIBLE);
-        results = response.body().getResults() ;
-        gridAdapter = new GridAdapter(this,results);
-        gridView.setAdapter(gridAdapter);
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList("key",results);
+        outState.putInt("choice",choice);
+    }
 
+    @Override
+    public void onResponse(Call<Movies> call, Response<Movies> response) {
+        results = (ArrayList<Result>) response.body().getResults();
+        mainFragment.refresh(results);
     }
 
     @Override
@@ -95,13 +97,19 @@ public class MainActivity extends AppCompatActivity implements Callback<Movies>,
             Toast.makeText(this,"Connection Unavilable !",Toast.LENGTH_SHORT).show();
             return;
         }
-        CharSequence sequence = adapter.getItem(position) ;
-        if(sequence.equals("High Rating")){
-            Call<Movies> ratingCall = tmdbAPi.loadHighRated(Api.API_KEY) ;
-            ratingCall.enqueue(this);
-        } else {
-            Call<Movies> popularCall = tmdbAPi.loadPopular(Api.API_KEY) ;
-            popularCall.enqueue(this);
+        choice = position ;
+        switch (position){
+            case 0 :
+                Call<Movies> popularCall = tmdbAPi.loadPopular(Api.API_KEY) ;
+                popularCall.enqueue(this);
+                break;
+            case 1 :
+                Call<Movies> ratingCall = tmdbAPi.loadHighRated(Api.API_KEY) ;
+                ratingCall.enqueue(this);
+                break;
+            default:
+                Call<Movies> popularCall1 = tmdbAPi.loadPopular(Api.API_KEY) ;
+                popularCall1.enqueue(this);
         }
     }
 
@@ -110,18 +118,7 @@ public class MainActivity extends AppCompatActivity implements Callback<Movies>,
 
     }
 
-    @Override
-    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Result movie_clicked = (Result) gridAdapter.getItem(position);
 
-        Intent intent = new Intent(this,MovieDetail.class) ;
-        intent.putExtra(MovieDetail.TITLE, movie_clicked.getOriginalTitle());
-        intent.putExtra(MovieDetail.POSTER_PATH, movie_clicked.getPosterPath());
-        intent.putExtra(MovieDetail.OVERVIEW, movie_clicked.getOverview());
-        intent.putExtra(MovieDetail.RATING, movie_clicked.getVoteAverage());
-        intent.putExtra(MovieDetail.RELEASE_DATE, movie_clicked.getReleaseDate());
-        startActivity(intent);
-    }
 
     private boolean checkConnectivity(){
         ConnectivityManager cm =
@@ -132,4 +129,6 @@ public class MainActivity extends AppCompatActivity implements Callback<Movies>,
 
         return isConnected ;
     }
+
+
 }

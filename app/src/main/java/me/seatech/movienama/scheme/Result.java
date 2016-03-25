@@ -1,12 +1,16 @@
 package me.seatech.movienama.scheme;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Result {
+public class Result implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose
@@ -302,5 +306,63 @@ public class Result {
     public void setVoteAverage(double voteAverage) {
         this.voteAverage = voteAverage;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(posterPath);
+        dest.writeString(overview);
+        dest.writeString(releaseDate);
+        dest.writeString(originalLanguage);
+        dest.writeString(originalTitle);
+        dest.writeString(title);
+        dest.writeString(backdropPath);
+        dest.writeByte((byte) (adult ? 1 : 0));
+        dest.writeInt(id);
+        dest.writeDouble(popularity);
+        dest.writeInt(voteCount);
+        dest.writeByte((byte) (video ? 1 : 0)) ;
+        dest.writeDouble(voteAverage);
+
+        int[] genreid = new int[genreIds.size()] ;
+        for(int i = 0; i < genreIds.size(); i++) genreid[i] = genreIds.get(i);
+
+        dest.writeIntArray(genreid);
+    }
+
+    private Result(Parcel in){
+        posterPath = in.readString();
+        overview = in.readString();
+        releaseDate = in.readString() ;
+        originalLanguage = in.readString() ;
+        originalTitle = in.readString() ;
+        title = in.readString() ;
+        backdropPath = in.readString() ;
+        adult = in.readByte() != 0;
+        id = in.readInt() ;
+        popularity = in.readDouble() ;
+        voteCount = in.readInt() ;
+        video = in.readByte() != 0 ;
+        voteAverage = in.readDouble() ;
+        int[] genreid = null ;
+        in.readIntArray(genreid);
+        List<Integer> list = new ArrayList<>(genreid.length) ;
+        for(int i=0;i<genreid.length;i++) list.add(genreid[i]) ;
+        genreIds = list ;
+    }
+
+    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
+        public Result createFromParcel(Parcel in) {
+            return new Result(in);
+        }
+
+        public Result[] newArray(int size) {
+            return new Result[size];
+        }
+    };
 
 }
