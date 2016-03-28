@@ -26,7 +26,9 @@
                 <ImageView
                     android:layout_width="200dp"
                     android:layout_height="300dp"
-                    android:id="@+id/posterImage" />
+                    android:id="@+id/posterImage"
+                    tools:src="@drawable/fight_club_poster"
+                    />
 
                 <LinearLayout
                     android:orientation="vertical"
@@ -42,19 +44,32 @@
                         android:textColor="@android:color/white"
                         android:textSize="25sp"
                         android:textStyle="bold"
+                        tools:text="Fight Club"
 
+                        />
+                    <RatingBar
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rating"
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:isIndicator="true"
+                        android:rating="4"
+                        android:stepSize="0.5"
+                        android:numStars="5"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/release_tv"
                         android:layout_marginTop="5dp"
+                        tools:text="Nov 1995"
                         />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:id="@+id/rating_tv"
                         android:layout_marginTop="5dp"
+                        tools:text="8.0"
                         />
 
 
@@ -68,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/overview_tv"
                 android:textColor="@android:color/white"
+                tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion."
                 />
 
         </LinearLayout>

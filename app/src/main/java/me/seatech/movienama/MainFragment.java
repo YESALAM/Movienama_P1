@@ -12,24 +12,26 @@ import android.widget.ProgressBar;
 
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
 import me.seatech.movienama.adapter.GridAdapter;
-import me.seatech.movienama.scheme.Result;
+import me.seatech.movienama.scheme.Movie;
 
 /**
  * Created by yesalam on 3/26/16.
  */
 public class MainFragment extends Fragment implements AdapterView.OnItemClickListener {
 
-    private GridView mGridView ;
-    private ProgressBar mProgressBar ;
+    @Bind(R.id.gridView)
+    GridView mGridView ;
+    @Bind(R.id.progressBar)
+    ProgressBar mProgressBar ;
     private GridAdapter mGridAdapter ;
+    private List<Movie> movies ;
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.main_fragment,container,false) ;
-
-        mGridView = (GridView) rootView.findViewById(R.id.gridView);
-        mProgressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
-
+        View rootView = inflater.inflate(R.layout.fragment_main,container,false) ;
+        ButterKnife.bind(this,rootView);
         mGridView.setOnItemClickListener(this);
         mGridView.setVisibility(View.GONE);
 
@@ -39,22 +41,19 @@ public class MainFragment extends Fragment implements AdapterView.OnItemClickLis
 
 
 
-    public void refresh(List<Result> results){
+    public void refresh(List<Movie> movies){
+        this.movies = movies ;
         mProgressBar.setVisibility(View.GONE);
-        mGridAdapter = new GridAdapter(getActivity(),results) ;
+        mGridAdapter = new GridAdapter(getActivity(), movies) ;
         mGridView.setAdapter(mGridAdapter);
         mGridView.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Result movie_clicked = (Result) mGridAdapter.getItem(position);
+
         Intent intent = new Intent(getContext(),DetailActivity.class) ;
-        intent.putExtra(DetailActivity.TITLE, movie_clicked.getOriginalTitle());
-        intent.putExtra(DetailActivity.POSTER_PATH, movie_clicked.getPosterPath());
-        intent.putExtra(DetailActivity.OVERVIEW, movie_clicked.getOverview());
-        intent.putExtra(DetailActivity.RATING, movie_clicked.getVoteAverage());
-        intent.putExtra(DetailActivity.RELEASE_DATE, movie_clicked.getReleaseDate());
+        intent.putExtra("movie",movies.get(position));
         startActivity(intent);
     }
 }

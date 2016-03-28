@@ -2,40 +2,47 @@ package me.seatech.movienama;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.widget.ImageView;
+
+import com.squareup.picasso.Picasso;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import me.seatech.movienama.scheme.Movie;
+import me.seatech.movienama.util.Api;
 
 public class DetailActivity extends AppCompatActivity {
 
-    //defining the keys
-    public static final String TITLE = "title" ;
-    public static final String RATING = "rating" ;
-    public static final String OVERVIEW = "overview" ;
-    public static final String POSTER_PATH = "path" ;
-    public static final String RELEASE_DATE = "date" ;
 
     private static final String LOG_TAG = DetailActivity.class.getSimpleName() ;
-
+    @Bind(R.id.collapsing_toolbar_detail)
+    CollapsingToolbarLayout toolbarLayout ;
+    @Bind(R.id.backdrop_poster)
+    ImageView backdropPosterIv;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
+        ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
         Intent intent = getIntent() ;
+        Movie movie = intent.getParcelableExtra("movie");
 
-
-
+        toolbarLayout.setTitle(movie.getTitle());
+        String url = Api.BASE_URL_IMAGE+Api.SIZE_W342+ movie.getBackdropPath() ;
+        Picasso.with(this).load(url).into(backdropPosterIv);
 
         Bundle arguments = new Bundle() ;
-        arguments.putString(POSTER_PATH,intent.getStringExtra(POSTER_PATH));
-        arguments.putString(OVERVIEW,intent.getStringExtra(OVERVIEW));
-        arguments.putString(RELEASE_DATE,intent.getStringExtra(RELEASE_DATE));
-        arguments.putString(TITLE,intent.getStringExtra(TITLE));
-        arguments.putString(RATING,intent.getDoubleExtra(RATING,0.0)+"");
+        arguments.putParcelable("movie", movie);
 
         DetailFragment detailFragment = new DetailFragment() ;
         detailFragment.setArguments(arguments);

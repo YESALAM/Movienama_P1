@@ -23,22 +23,22 @@ import me.seatech.movienama.util.Api;
 public class GridAdapter extends BaseAdapter {
 
     private Context context;
-    private List<Result> resultList ;
+    private List<Movie> movieList;
 
-    public GridAdapter(Context context,List<Result> resultList){
+    public GridAdapter(Context context,List<Movie> movieList){
         this.context = context ;
-        this.resultList = resultList ;
+        this.movieList = movieList;
 
     }
 
     @Override
     public int getCount() {
-        return resultList.size();
+        return movieList.size();
     }
 
     @Override
     public Object getItem(int position) {
-        return resultList.get(position) ;
+        return movieList.get(position) ;
     }
 
     @Override
@@ -56,13 +56,13 @@ public class GridAdapter extends BaseAdapter {
             layout = (FrameLayout) convertView;
         }
 
-        Result result = resultList.get(position) ;
-        if(!result.getTitle().isEmpty()){
+        Movie movie = movieList.get(position) ;
+        if(!movie.getTitle().isEmpty()){
             TextView textView = (TextView) layout.findViewById(R.id.posterTitle) ;
-            textView.setText(result.getTitle());
+            textView.setText(movie.getTitle());
         }
 
-        String url = Api.BASE_URL_IMAGE+Api.SIZE_W182+result.getPosterPath() ;
+        String url = Api.BASE_URL_IMAGE+Api.SIZE_W182+ movie.getPosterPath() ;
         ImageView imageView = (ImageView) layout.findViewById(R.id.posterImage);
         Picasso.with(context)
                 .load(url)

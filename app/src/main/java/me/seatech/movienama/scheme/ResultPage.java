@@ -6,14 +6,14 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Movies {
+public class ResultPage {
 
     @SerializedName("page")
     @Expose
     private int page;
     @SerializedName("results")
     @Expose
-    private List<Result> results = new ArrayList<Result>();
+    private List<Movie> movies = new ArrayList<Movie>();
     @SerializedName("total_results")
     @Expose
     private int totalResults;
@@ -44,17 +44,17 @@ public class Movies {
      * @return
      * The results
      */
-    public List<Result> getResults() {
-        return results;
+    public List<Movie> getMovies() {
+        return movies;
     }
 
     /**
      *
-     * @param results
+     * @param movies
      * The results
      */
-    public void setResults(List<Result> results) {
-        this.results = results;
+    public void setMovies(List<Movie> movies) {
+        this.movies = movies;
     }
 
     /**

@@ -4,13 +4,12 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Result implements Parcelable {
+public class Movie implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose
@@ -328,13 +327,13 @@ public class Result implements Parcelable {
         dest.writeByte((byte) (video ? 1 : 0)) ;
         dest.writeDouble(voteAverage);
 
-        int[] genreid = new int[genreIds.size()] ;
+       /* int[] genreid = new int[genreIds.size()] ;
         for(int i = 0; i < genreIds.size(); i++) genreid[i] = genreIds.get(i);
 
-        dest.writeIntArray(genreid);
+        dest.writeIntArray(genreid);*/
     }
 
-    private Result(Parcel in){
+    private Movie(Parcel in){
         posterPath = in.readString();
         overview = in.readString();
         releaseDate = in.readString() ;
@@ -348,20 +347,21 @@ public class Result implements Parcelable {
         voteCount = in.readInt() ;
         video = in.readByte() != 0 ;
         voteAverage = in.readDouble() ;
-        int[] genreid = null ;
+       /* int[] genreid = null ;
         in.readIntArray(genreid);
+
         List<Integer> list = new ArrayList<>(genreid.length) ;
         for(int i=0;i<genreid.length;i++) list.add(genreid[i]) ;
-        genreIds = list ;
+        genreIds = list ;*/
     }
 
-    public static final Parcelable.Creator<Result> CREATOR = new Parcelable.Creator<Result>() {
-        public Result createFromParcel(Parcel in) {
-            return new Result(in);
+    public static final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
         }
 
-        public Result[] newArray(int size) {
-            return new Result[size];
+        public Movie[] newArray(int size) {
+            return new Movie[size];
         }
     };
 

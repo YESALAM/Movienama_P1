@@ -2,6 +2,7 @@ package me.seatech.movienama;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import me.seatech.movienama.scheme.Movie;
 import me.seatech.movienama.util.Api;
 import static me.seatech.movienama.DetailActivity.* ;
 
@@ -24,11 +28,16 @@ import static me.seatech.movienama.DetailActivity.* ;
  */
 public class DetailFragment extends Fragment {
 
-    private TextView titleTextView ;
-    private TextView releaseTextView ;
-    private TextView ratingTextView ;
-    private TextView overviewTextView ;
-    private ImageView posterImageView ;
+    @Bind(R.id.title_tv)
+    TextView titleTextView ;
+    @Bind(R.id.release_tv)
+    TextView releaseTextView ;
+    @Bind(R.id.rating_tv)
+    TextView ratingTextView ;
+    @Bind(R.id.overview_tv)
+    TextView overviewTextView ;
+    @Bind(R.id.posterImage)
+    ImageView posterImageView ;
 
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -37,26 +46,24 @@ public class DetailFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_detail,container,false) ;
 
-        posterImageView = (ImageView) rootView.findViewById(R.id.posterImage);
-        titleTextView = (TextView) rootView.findViewById(R.id.title_tv) ;
-        releaseTextView = (TextView) rootView.findViewById(R.id.release_tv) ;
-        ratingTextView = (TextView) rootView.findViewById(R.id.rating_tv) ;
-        overviewTextView = (TextView) rootView.findViewById(R.id.overview_tv) ;
+        ButterKnife.bind(this,rootView);
 
         Bundle intent = getArguments();
-        if (intent != null) {
-            String url = Api.BASE_URL_IMAGE+Api.SIZE_W342+intent.getString(POSTER_PATH) ;
+        Movie movie = intent.getParcelable("movie");
+        if (movie != null) {
+            String url = Api.BASE_URL_IMAGE+Api.SIZE_W342+movie.getPosterPath() ;
             Picasso.with(getContext())
                     .load(url)
                     .placeholder(R.drawable.movie_reel_clip_art)
                     .error(R.drawable.movie_reel_clip_art)
                     .into(posterImageView);
 
-            titleTextView.setText(intent.getString(TITLE));
-            ratingTextView.setText(intent.getString(RATING)+"/10");
-            overviewTextView.setText(intent.getString(OVERVIEW));
+            titleTextView.setText(movie.getTitle());
+            ratingTextView.setText(movie.getVoteAverage()+"/10");
+            overviewTextView.setText(movie.getOverview());
 
-            String dateString = intent.getString(RELEASE_DATE);
+            String dateString = movie.getReleaseDate();
+
             DateFormat dateFormat = new SimpleDateFormat("yyyy-dd-MM", Locale.ENGLISH) ;
             try {
                 Date date = dateFormat.parse(dateString) ;
