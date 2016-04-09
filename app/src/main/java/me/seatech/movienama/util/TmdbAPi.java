@@ -1,8 +1,9 @@
 package me.seatech.movienama.util;
 
-import me.seatech.movienama.scheme.*;
+import me.seatech.movienama.schemas.*;
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
@@ -10,9 +11,14 @@ import retrofit2.http.Query;
  */
 public interface TmdbAPi {
 
-    @GET("movie?sort_by=popularity.desc")
+    @GET("discover/movie?sort_by=popularity.desc")
     Call<ResultPage> loadPopular(@Query("api_key") String key);
 
-    @GET("movie?sort_by=vote_average.desc&vote_count.gte=50")
+    @GET("discover/movie?sort_by=vote_average.desc&vote_count.gte=50")
     Call<ResultPage> loadHighRated(@Query("api_key") String key);
+
+
+    @GET("movie/{id}/reviews")
+    Call<CommentResult> fetchComment(@Path("id") int id,@Query("api_key") String key) ;
+
 }

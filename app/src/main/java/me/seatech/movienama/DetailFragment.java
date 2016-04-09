@@ -2,7 +2,6 @@ package me.seatech.movienama;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +18,8 @@ import java.util.Locale;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.seatech.movienama.scheme.Movie;
+import me.seatech.movienama.schemas.Movie;
 import me.seatech.movienama.util.Api;
-import static me.seatech.movienama.DetailActivity.* ;
 
 /**
  * Created by yesalam on 3/26/16.
@@ -42,9 +40,7 @@ public class DetailFragment extends Fragment {
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-
-
-        View rootView = inflater.inflate(R.layout.fragment_detail,container,false) ;
+        View rootView = inflater.inflate(R.layout.fragment_detail_info,container,false) ;
 
         ButterKnife.bind(this,rootView);
 

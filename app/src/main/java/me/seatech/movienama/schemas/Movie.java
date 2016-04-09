@@ -1,4 +1,4 @@
-package me.seatech.movienama.scheme;
+package me.seatech.movienama.schemas;
 
 import android.os.Parcel;
 import android.os.Parcelable;

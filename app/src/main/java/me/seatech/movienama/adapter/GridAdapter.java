@@ -14,7 +14,7 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import me.seatech.movienama.R;
-import me.seatech.movienama.scheme.*;
+import me.seatech.movienama.schemas.*;
 import me.seatech.movienama.util.Api;
 
 /**

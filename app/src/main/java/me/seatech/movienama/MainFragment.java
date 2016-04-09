@@ -15,7 +15,7 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.seatech.movienama.adapter.GridAdapter;
-import me.seatech.movienama.scheme.Movie;
+import me.seatech.movienama.schemas.Movie;
 
 /**
  * Created by yesalam on 3/26/16.

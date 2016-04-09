@@ -17,8 +17,8 @@ import java.util.ArrayList;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import me.seatech.movienama.scheme.*;
-import me.seatech.movienama.scheme.Movie;
+import me.seatech.movienama.schemas.*;
+import me.seatech.movienama.schemas.Movie;
 import me.seatech.movienama.util.Api;
 import me.seatech.movienama.util.TmdbAPi;
 import retrofit2.Call;
@@ -52,10 +52,10 @@ public class MainActivity extends AppCompatActivity implements Callback<ResultPa
 
 
 
-        retrofit = new Retrofit.Builder()
-                .baseUrl(Api.BASE_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
+            retrofit = new Retrofit.Builder()
+                    .baseUrl(Api.BASE_URL)
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .build();
         tmdbAPi = retrofit.create(TmdbAPi.class) ;
 
         if(savedInstanceState != null ){
