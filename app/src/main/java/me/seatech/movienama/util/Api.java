@@ -9,6 +9,7 @@ public class Api {
     public static final String API_KEY = "cc945c15916e0a6ccb4d2c9d53c22a6f" ;
     public static final String SIZE_W182 = "w185" ;
     public static final String SIZE_W342 = "w342" ;
+    public static final String YOU_TUBE_URL = "https://youtu.be/" ;
 
 
 }

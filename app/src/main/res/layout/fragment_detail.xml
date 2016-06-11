@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="10dp"
-        tools:context=".DetailActivity"
+        tools:context=".DetailFragment"
         >
 
         <LinearLayout
@@ -87,9 +87,57 @@
                 android:id="@+id/overview_tv"
                 android:textColor="@android:color/white"
                 tools:text="A ticking-time-bomb insomniac and a slippery soap salesman channel primal male aggression into a shocking new form of therapy. Their concept catches on, with underground fight clubs forming in every town, until an eccentric gets in the way and ignites an out-of-control spiral toward oblivion."
+                android:textSize="15sp" />
+
+
+
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="User Reviews"
+                android:textSize="20sp"
+
                 />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/review_container"
+                    >
+                </LinearLayout>
+
+
+
+            <TextView
+                android:layout_marginTop="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Trailers"
+                android:textSize="20sp"
+
+                />
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:id="@+id/trailer_container"
+                    >
+
+
+                </LinearLayout>
+
+
+
+
         </LinearLayout>
+
+
 
     </ScrollView>
 

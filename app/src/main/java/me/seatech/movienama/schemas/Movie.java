@@ -333,6 +333,8 @@ public class Movie implements Parcelable {
         dest.writeIntArray(genreid);*/
     }
 
+    public Movie(){}
+
     private Movie(Parcel in){
         posterPath = in.readString();
         overview = in.readString();

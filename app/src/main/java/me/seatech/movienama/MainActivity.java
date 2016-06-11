@@ -6,6 +6,8 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -27,7 +29,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity implements Callback<ResultPage>,AdapterView.OnItemSelectedListener {
+public class MainActivity extends AppCompatActivity implements Callback<MovieResult>,AdapterView.OnItemSelectedListener {
 
     private final String LOG_TAG = MainActivity.class.getSimpleName() ;
 
@@ -41,6 +43,7 @@ public class MainActivity extends AppCompatActivity implements Callback<ResultPa
     private ArrayList<Movie> movies;
     private int choice=0 ;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,11 +55,17 @@ public class MainActivity extends AppCompatActivity implements Callback<ResultPa
 
 
 
-            retrofit = new Retrofit.Builder()
+        retrofit = new Retrofit.Builder()
                     .baseUrl(Api.BASE_URL)
                     .addConverterFactory(GsonConverterFactory.create())
                     .build();
         tmdbAPi = retrofit.create(TmdbAPi.class) ;
+
+        Log.e("main ", BuildConfig.API) ;
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        int width = metrics.widthPixels ;
+        int dp = (width * 160)/ metrics.densityDpi ;
+        Log.e("Main"," dp is "+dp) ;
 
         if(savedInstanceState != null ){
             spinner.setSelection(savedInstanceState.getInt("choice"));
@@ -81,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements Callback<ResultPa
     }
 
     @Override
-    public void onResponse(Call<ResultPage> call, Response<ResultPage> response) {
+    public void onResponse(Call<MovieResult> call, Response<MovieResult> response) {
         movies = (ArrayList<Movie>) response.body().getMovies();
         mainFragment.refresh(movies);
     }
 
     @Override
-    public void onFailure(Call<ResultPage> call, Throwable t) {
+    public void onFailure(Call<MovieResult> call, Throwable t) {
 
     }
 
@@ -101,15 +110,16 @@ public class MainActivity extends AppCompatActivity implements Callback<ResultPa
         choice = position ;
         switch (position){
             case 0 :
-                Call<ResultPage> popularCall = tmdbAPi.loadPopular(Api.API_KEY) ;
+                Call<MovieResult> popularCall = tmdbAPi.loadPopular(BuildConfig.API) ;
                 popularCall.enqueue(this);
                 break;
             case 1 :
-                Call<ResultPage> ratingCall = tmdbAPi.loadHighRated(Api.API_KEY) ;
+
+                Call<MovieResult> ratingCall = tmdbAPi.loadHighRated(BuildConfig.API) ;
                 ratingCall.enqueue(this);
                 break;
             default:
-                Call<ResultPage> popularCall1 = tmdbAPi.loadPopular(Api.API_KEY) ;
+                Call<MovieResult> popularCall1 = tmdbAPi.loadPopular(BuildConfig.API) ;
                 popularCall1.enqueue(this);
         }
     }

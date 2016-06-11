@@ -27,6 +27,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="me.seatech.movienama.MainActivity" />
         </activity>
+        <provider
+            android:name="me.seatech.movienama.util.DBProvider"
+            android:authorities="me.seatech.movienama"
+            android:enabled="true"
+            android:exported="true">
+        </provider>
     </application>
 
 </manifest>

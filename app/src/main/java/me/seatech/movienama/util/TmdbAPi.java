@@ -12,13 +12,16 @@ import retrofit2.http.Query;
 public interface TmdbAPi {
 
     @GET("discover/movie?sort_by=popularity.desc")
-    Call<ResultPage> loadPopular(@Query("api_key") String key);
+    Call<MovieResult> loadPopular(@Query("api_key") String key);
 
     @GET("discover/movie?sort_by=vote_average.desc&vote_count.gte=50")
-    Call<ResultPage> loadHighRated(@Query("api_key") String key);
+    Call<MovieResult> loadHighRated(@Query("api_key") String key);
 
 
     @GET("movie/{id}/reviews")
     Call<CommentResult> fetchComment(@Path("id") int id,@Query("api_key") String key) ;
+
+    @GET("movie/{id}/videos")
+    Call<TrailerResult> fetchTrailer(@Path("id") int id,@Query("api_key") String key) ;
 
 }

@@ -1,10 +1,13 @@
 
 package me.seatech.movienama.schemas ;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Comment {
+public class Comment implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -91,4 +94,35 @@ public class Comment {
         this.url = url;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(id);
+        dest.writeString(author);
+        dest.writeString(content);
+        dest.writeString(url);
+    }
+
+    public Comment(Parcel in){
+        id = in.readString();
+        author = in.readString() ;
+        content = in.readString() ;
+        url = in.readString() ;
+    }
+
+    public  static  final Parcelable.Creator<Comment> CREATOR = new Creator<Comment>() {
+        @Override
+        public Comment createFromParcel(Parcel source) {
+            return new Comment(source);
+        }
+
+        @Override
+        public Comment[] newArray(int size) {
+            return new Comment[size];
+        }
+    };
 }
